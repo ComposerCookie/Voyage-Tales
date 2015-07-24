@@ -18,11 +18,17 @@ class InGame : CCNode{
     var keepMovingTap : Bool = false;
     var lastTouch : CCTouch!;
     var canMoveAgain : Bool = true;
+    var NPCList : [NPC] = [];
+    
+    weak var chatGUI : ChatGUI!;
     
     var middleY = (Data.getMaxTileY() - 2) * 32 / 2 - 48;
     var middleX = Data.getMaxTileX() * 32 / 2 - 32;
     
     var bufferArray : [Int] = [];
+    var lastTouchInChat : Bool = false
+    var lastTouchAfterMove = CCTouch()
+    var moveIt = false
     
     override func update(delta: CCTime) {
         let temp = self.parent as! MainScene;
@@ -55,18 +61,29 @@ class InGame : CCNode{
     
     override func touchEnded(touch: CCTouch!, withEvent event: CCTouchEvent!) {
         keepMovingTap = false;
+        moveIt = false
 
     }
     
     override func touchCancelled(touch: CCTouch!, withEvent event: CCTouchEvent!) {
+        moveIt = false
         //
     }
     
     override func touchMoved(touch: CCTouch!, withEvent event: CCTouchEvent!) {
-        //
+        println("-----touchMoved-----")
+        if lastTouchInChat {
+            if moveIt {
+                println("is getting to the calculation of the offset")
+                var offset = touch.locationInWorld().y - lastTouchAfterMove.locationInWorld().y
+                chatGUI.moveByOffset(offset)
+            }
+        }
+        lastTouchAfterMove = touch
     }
     
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
+        
         var temp = self.parent as! MainScene;
         
         
@@ -74,8 +91,16 @@ class InGame : CCNode{
         
         if (touch.tapCount > 1){
             keepMovingTap = true;
+            lastTouchInChat = false
+        } else {
+            if (touch.locationInWorld().x < 300) && (touch.locationInWorld().y < 230) {
+                lastTouchInChat = true
+                chatGUI.originalTouch = touch.locationInWorld()
+                moveIt = true
+            } else {
+                lastTouchInChat = false
+            }
         }
-        
     }
     
     func initialize(){

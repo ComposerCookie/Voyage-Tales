@@ -10,6 +10,8 @@
 		4F0127171B3DD80B00627B1E /* GameCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0127161B3DD80B00627B1E /* GameCharacter.swift */; };
 		4F0471721B58DB1D004229EF /* CharFrameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0471711B58DB1D004229EF /* CharFrameType.swift */; };
 		4F0C05BB1B51A2DD0000CAF9 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C05BA1B51A2DD0000CAF9 /* Data.swift */; };
+		4F2156F01B601C510019900E /* NPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2156EF1B601C510019900E /* NPC.swift */; };
+		4F2156F41B6020730019900E /* ChatGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2156F31B6020730019900E /* ChatGUI.swift */; };
 		4F3719951B598427002473A1 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3719941B598427002473A1 /* SwiftyJSON.swift */; };
 		4FC07D401B3A728400032EA5 /* Socket.IO-Client-Swift.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 4FC07D311B3A728400032EA5 /* Socket.IO-Client-Swift.podspec */; };
 		4FC07D411B3A728400032EA5 /* SocketAckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC07D331B3A728400032EA5 /* SocketAckManager.swift */; };
@@ -187,6 +189,8 @@
 		4F0127161B3DD80B00627B1E /* GameCharacter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameCharacter.swift; path = "../../../../jacqueline/Documents/VoyageTales-App/VoyageClient.spritebuilder/GameCharacter.swift"; sourceTree = "<group>"; };
 		4F0471711B58DB1D004229EF /* CharFrameType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CharFrameType.swift; path = "../../../../jacqueline/Documents/VoyageTales-App/VoyageClient.spritebuilder/CharFrameType.swift"; sourceTree = "<group>"; };
 		4F0C05BA1B51A2DD0000CAF9 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Data.swift; path = "../../../../jacqueline/Documents/VoyageTales-App/VoyageClient.spritebuilder/Data.swift"; sourceTree = "<group>"; };
+		4F2156EF1B601C510019900E /* NPC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPC.swift; sourceTree = "<group>"; };
+		4F2156F31B6020730019900E /* ChatGUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatGUI.swift; path = "../../../../jacqueline/Documents/VoyageTales-App/VoyageClient.spritebuilder/ChatGUI.swift"; sourceTree = "<group>"; };
 		4F3719931B598427002473A1 /* SwiftyJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftyJSON.h; sourceTree = "<group>"; };
 		4F3719941B598427002473A1 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		4FC07D311B3A728400032EA5 /* Socket.IO-Client-Swift.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Socket.IO-Client-Swift.podspec"; sourceTree = "<group>"; };
@@ -535,9 +539,11 @@
 				4FE16AE21B3B7454004686B2 /* LoginGUI.swift */,
 				4FD35EBE1B3C6B44007A5D3C /* CreateGUI.swift */,
 				4F0127161B3DD80B00627B1E /* GameCharacter.swift */,
+				4F2156EF1B601C510019900E /* NPC.swift */,
 				4FE4BCAA1B485B0100A67AEF /* FocusTextfield.swift */,
 				4FD324AD1B486FBC009DCE99 /* CharPicker.swift */,
 				4FD324B11B4871BD009DCE99 /* SelectCharGUI.swift */,
+				4F2156F31B6020730019900E /* ChatGUI.swift */,
 				4FD5D92D1B48928100E8C48D /* CharacterViewer.swift */,
 				4FD5D9331B48A94F00E8C48D /* NewCharGUI.swift */,
 				4FD0370B1B4C498400E50C46 /* VanityColorSelector.swift */,
@@ -957,11 +963,13 @@
 				4F0471721B58DB1D004229EF /* CharFrameType.swift in Sources */,
 				4FE5F7F71B4C8DE400A81701 /* NewCharAttributeBox.swift in Sources */,
 				4FC07D411B3A728400032EA5 /* SocketAckManager.swift in Sources */,
+				4F2156F01B601C510019900E /* NPC.swift in Sources */,
 				4FC07D471B3A728400032EA5 /* SocketIOClient.swift in Sources */,
 				4FD0370C1B4C498400E50C46 /* VanityColorSelector.swift in Sources */,
 				4FE16AE31B3B7454004686B2 /* LoginGUI.swift in Sources */,
 				4FC07D451B3A728400032EA5 /* SocketEventHandler.swift in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
+				4F2156F41B6020730019900E /* ChatGUI.swift in Sources */,
 				7A046D7919E84ED5004C4763 /* MainScene.swift in Sources */,
 				4FC07D481B3A728400032EA5 /* SocketLogger.swift in Sources */,
 				4FC07D491B3A728400032EA5 /* SocketPacket.swift in Sources */,
@@ -1213,7 +1221,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1245,7 +1253,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

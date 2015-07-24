@@ -121,13 +121,21 @@ class MainScene: CCNode {
             self?.serverApproveMovement(UInt8(dir));
             return;
         };
-            
+        
         self.socket.on("sUpdatePlayerPosition"){[weak self] data, ack in
             var curX = data![0] as! Int;
             var curY = data![1] as! Int;
             var dir = data![2] as! Int;
             
             self?.serverSendUpdatePlayerPos(curX, curY : curY, dir : dir);
+        };
+        
+        self.socket.on("sBroadcastMsg") {[weak self] data, ack in
+            println("this run");
+            var msg = data![0] as! String;
+            var msgType = data![1] as! Int;
+            self?.serverBroadcastedMsg(msg, msgType: msgType);
+            return;
         };
     }
     
@@ -331,6 +339,15 @@ class MainScene: CCNode {
     
     func sendMovementCompleted(){
         self.socket.emit("cPlayerMoved");
+    }
+    
+    func serverBroadcastedMsg(msg : String, msgType : Int){
+        println("receive some kind of message for sure");
+        inGame.chatGUI.receiveMessage(msg, msgType: msgType);
+    }
+    
+    func sendChat(msg : String, msgType : Int){
+        self.socket.emit("cSendChat", msg, msgType);
     }
 
 }
