@@ -137,11 +137,32 @@ class MainScene: CCNode {
             self?.serverBroadcastedMsg(msg, msgType: msgType);
             return;
         };
+        
+        self.socket.on("sSendNewCharOnMap"){[weak self] data, ack in
+            var char1 = data?[0] as? NSDictionary!;
+            
+            self?.serverSendNewCharOnMap(char1);
+        };
+        
+        self.socket.on("sUpdateOtherPlayerPosition"){[weak self] data, ack in
+            var name = data![0] as! String;
+            var curX = data![1] as! Int;
+            var curY = data![2] as! Int;
+            var dir = data![3] as! Int;
+            
+            self?.serverSendUpdateOtherPlayerPos(name, curX: curX, curY: curY, dir: dir)
+        };
     }
     
     func serverApproveCharCreate(){
         newCharGUI.enable(false);
         selectCharGUI.enable(true);
+    }
+    
+    func serverSendNewCharOnMap(char1 : NSDictionary!){
+        var one : GameCharacter!;
+        one = GameCharacter(n: char1["name"] as! String, g: char1["gender"] as! Int, s: char1["skin"] as! Int, d: char1["dir"] as! Int, h: char1["hair"] as! Int, hc: char1["hairColor"] as! Int, e: char1["eye"] as! Int, ec: char1["eyeColor"] as! Int, str: char1["strength"] as! Int, dex: char1["dexterity"] as! Int, end: char1["endurance"] as! Int, agi: char1["agility"] as! Int, int: char1["intelligence"] as! Int, wis: char1["wisdom"] as! Int, remain: char1["remaining"] as! Int, l: char1["level"] as! Int, exp: char1["cEXP"] as! Int);
+        inGame.playerList.append(one);
     }
     
     
@@ -327,10 +348,21 @@ class MainScene: CCNode {
     }
     
     func serverSendUpdatePlayerPos(curX : Int, curY : Int, dir : Int){
-        inGame.charMoved(curX, charY: curY, dir: UInt8(dir));
+        if (inGame.requestFullUpdate < 10){
+            inGame.charMoved(curX, charY: curY, dir: UInt8(dir));
+            inGame.requestFullUpdate++;
+        }
+        else{
+            inGame.charMoved(curX, charY: curY);
+            inGame.requestFullUpdate = 0;
+        }
         inGame.playerChara.dir = UInt8(dir);
         inGame.playerChara.reloadDrawer();
         inGame.canMoveAgain = true;
+    }
+    
+    func serverSendUpdateOtherPlayerPos(name : String, curX : Int, curY : Int, dir : Int){
+        inGame.updateOtherChar(name, curX: curX, curY: curY, dir: dir);
     }
     
     func sendRequestPlayerMovement(dir : UInt8){

@@ -9,6 +9,7 @@
 import Foundation
 
 class InGame : CCNode{
+    
     var bottomMap : GameMap!;
     var topMap : GameMap!;
     var insideMap : GameMap!;
@@ -19,6 +20,7 @@ class InGame : CCNode{
     var lastTouch : CCTouch!;
     var canMoveAgain : Bool = true;
     var NPCList : [NPC] = [];
+    var playerList : [GameCharacter] = [];
     
     weak var chatGUI : ChatGUI!;
     
@@ -27,11 +29,29 @@ class InGame : CCNode{
     
     var bufferArray : [Int] = [];
     var lastTouchInChat : Bool = false
-    var lastTouchAfterMove = CCTouch()
+    var lastTouchChat = CCTouch()
+    var currentTouchChat = CCTouch()
     var moveIt = false
+    var timeSinceStart = 1
+    var requestFullUpdate = 0;
     
     override func update(delta: CCTime) {
         let temp = self.parent as! MainScene;
+        if timeSinceStart % 10 == 0 {
+            
+            println("move it is : \(moveIt)")
+            if moveIt {
+                println("y1: \(lastTouchChat.locationInWorld().y)")
+                println("y2: \(currentTouchChat.locationInWorld().y)")
+                var offset = lastTouchChat.locationInWorld().y - currentTouchChat.locationInWorld().y
+                println("updated offset to \(offset)")
+                chatGUI.moveByOffset(offset)
+                lastTouchChat = currentTouchChat
+            }
+            timeSinceStart = 1
+        }
+        //timeSinceStart += 1
+        
         if (playerChara != nil){
             playerChara.update(temp.currentTimestamp)
             
@@ -72,33 +92,47 @@ class InGame : CCNode{
     
     override func touchMoved(touch: CCTouch!, withEvent event: CCTouchEvent!) {
         println("-----touchMoved-----")
-        if lastTouchInChat {
-            if moveIt {
-                println("is getting to the calculation of the offset")
-                var offset = touch.locationInWorld().y - lastTouchAfterMove.locationInWorld().y
-                chatGUI.moveByOffset(offset)
-            }
-        }
-        lastTouchAfterMove = touch
+        //currentTouchChat = touch
+
+        
+        //        if lastTouchInChat {
+//            if moveIt {
+//                
+//                var offset = (touch.locationInWorld().y * 10) - (lastTouchAfterMove.locationInWorld().y * 10) > 0
+//                
+//                println("------------------------------------------------")
+//                println("--touch moved in chat with offset -> \(offset)--")
+//                println("------------------------------------------------")
+//                println("is getting to the calculation of the offset")
+//                
+//                chatGUI.moveByOffset(offset)
+//            }
+//        }
+//        lastTouchAfterMove = touch
     }
     
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
         
         var temp = self.parent as! MainScene;
         
+        currentTouchChat = touch
+        lastTouchChat = touch;
         
         lastTouch = touch;
+        if (touch.tapCount > 1){
+            keepMovingTap = true;
+        }
         
         if (touch.tapCount > 1){
             keepMovingTap = true;
             lastTouchInChat = false
         } else {
             if (touch.locationInWorld().x < 300) && (touch.locationInWorld().y < 230) {
-                lastTouchInChat = true
-                chatGUI.originalTouch = touch.locationInWorld()
-                moveIt = true
+                //lastTouchInChat = true
+                //chatGUI.originalTouch = touch.locationInWorld()
+                //moveIt = true
             } else {
-                lastTouchInChat = false
+                //lastTouchInChat = false
             }
         }
     }
@@ -115,6 +149,7 @@ class InGame : CCNode{
         
         curMapData = [[[Int]]]();
         renderData = [[[Int]]]();
+        playerList = [GameCharacter]();
         
         for (var l = 0; l < 13; l++){
             renderData.append([])
@@ -148,7 +183,9 @@ class InGame : CCNode{
         curMapData = data;
     }
     
-    
+    func updateOtherChar(name : String, curX : Int, curY : Int, dir : Int){
+        
+    }
     
     func charMoved(charX : Int, charY : Int, dir : UInt8){
         let screenWidth = Data.getMaxTileX()
