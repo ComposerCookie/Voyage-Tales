@@ -109,8 +109,9 @@ class ChatGUI: CCNode {
         screenHeight = chatBackground.boundingBox().height + txtChat.boundingBox().height - 30
         self.zOrder = 50
         txtChat.textField.textColor = UIColor.whiteColor();
+        
     }
-    
+
     
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
         println("----------")
@@ -127,7 +128,10 @@ class ChatGUI: CCNode {
     }
     
     func btnEnter_pressed(){
-        txtChat_entered()
+        for i in 0 ... 10 {
+            sendMessage("\(i)")
+            
+        }
     }
     
     func moveByOffset(offset : CGFloat) {
@@ -142,18 +146,39 @@ class ChatGUI: CCNode {
             //scroll up
             if chatArray.count > 0 {
                 if offset > 0 {
-                    if aTempVal! < 10 {
+                    if aTempVal! < 20 {
                         //checking just in casebut should never conflict
-                        chatArray[i].position.y += 1
+                        chatArray[i].position.y += offset * 0.4
+                    } else {
+                        if bottomArray.count > 0 {
+                            chatArray.insert(bottomArray.last!, atIndex: 0)
+                            bottomArray.removeLast()
+                        }
                     }
                 } else  if offset < 0 {
-                    if chatArray.last!.position.y > screenHeight - 10 {
-                        chatArray[i].position.y += -1
+//                    if chatArray.last!.position.y > screenHeight - 15 {
+                        chatArray[i].position.y += offset * 0.4
                         println("added an offset of")
-                    } else {
-                        println("add more text")
-                    }
+//                    } else {
+//                        println("add more text")
+//                    }
                 }
+            }
+            
+            if chatArray.count > 0 {
+                    //chatArray.insert(temp, atIndex: 0)
+                    chatArray[0].position.y = txtChat.boundingBox().height
+                    
+                
+                    
+                    println("chat array count is: \(chatArray.count)")
+                    if chatArray.count > 1 {
+                        for i in 1 ... chatArray.count - 1 {
+                            chatArray[i].position.y = chatArray[i].boundingBox().height + chatArray[i - 1].position.y
+                            println("the message: [\(chatArray[i].string)] was positioned at: \(chatArray[i].position)")
+                            
+                        }
+                    }
             }
             
         } // your mom is a good editor
@@ -270,7 +295,7 @@ class ChatGUI: CCNode {
             var yPos = chatArray[i].position.y
             
 
-            topHeight = 10.0
+            topHeight = 15.0
             bottomHeight = 10.0
 //            for i in 0 ..< topArray.count {
 //                topHeight += topArray[i].boundingBox().height
@@ -280,29 +305,32 @@ class ChatGUI: CCNode {
 //            }
             // fix bounds
             
-            if yPos > CGFloat(screenHeight) + topHeight {
+            
+            if yPos > CGFloat(screenHeight) + 1 {
                 println("--------------")
                 println("--------------")
                 println("--appending---")
                 println("--------------")
                 println("--------------")
+                println("fuck you ")
                 
                 chatArray[i].removeFromParent()
-                topArray.append(chatArray.removeAtIndex(i))
+                topArray.append(chatArray[i])
+                chatArray.removeAtIndex(i)
                 if !messageJustEntered {
                     if bottomArray.count > 0 {
                         chatArray.insert(bottomArray.removeLast(), atIndex: 0)
                         messages.addChild(chatArray[0])
                     }
                 }
-                chatArray[i].removeFromParent()
+                i -= 1
                 
             } else if yPos > CGFloat(screenHeight) {
                 chatArray[i].visible = false
             } else if yPos + chatArray[i].boundingBox().height > txtChat.boundingBox().height {
                 chatArray[i].visible = true
                 //fix overlap with scope buttons
-            } else if yPos + chatArray[i].boundingBox().height > -(bottomHeight) {
+            } else if yPos + chatArray[i].boundingBox().height > txtChat.boundingBox().height - 1 {
                 chatArray[i].visible = false
             } else {
                 chatArray[i].removeFromParent()
@@ -310,9 +338,13 @@ class ChatGUI: CCNode {
                 if topArray.count > 0 {
                     chatArray.append(topArray.removeLast())
                     messages.addChild(chatArray.last!)
+                    
+                    i -= 1
                 }
             }
             i += 1
+            
+            updateChatScope(chatScope)
         }
         
         println("the chat array is: ")
